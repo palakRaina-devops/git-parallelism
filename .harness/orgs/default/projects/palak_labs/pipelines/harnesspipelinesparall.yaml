@@ -48,7 +48,9 @@ pipeline:
                         - 1
                         - 2
                         - 3
-                    maxConcurrency: 1
-                    exclude:
-                      "-service": dev
+                      exclude:
+                        - env: prod
+                          replicas: 1
+                        - env: dev
+                          replicas: 1,2
         tags: {}
