@@ -53,4 +53,5 @@ pipeline:
                           replicas: 1
                         - env: dev
                           replicas: 1,2
+                    maxConcurrency: 2
         tags: {}
