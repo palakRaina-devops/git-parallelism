@@ -88,7 +88,7 @@ pipeline:
                             identifier: group2
                             spec:
                               connectorRef: account.dockerpalakconn
-                              image: apline
+                              image: alpine
                               shell: Sh
                               command: |-
                                 echo "Group 2 Start"
