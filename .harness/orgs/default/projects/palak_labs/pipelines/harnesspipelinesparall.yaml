@@ -1,0 +1,123 @@
+pipeline:
+  name: harness-pipelines-parall
+  identifier: harnesspipelinesparall
+  projectIdentifier: palak_labs
+  orgIdentifier: default
+  tags: {}
+  properties:
+    ci:
+      codebase:
+        connectorRef: account.ghadminconnector
+        repoName: git-parallelism
+        build: <+input>
+  stages:
+    - stage:
+        name: parallelism
+        identifier: parallelism
+        description: ""
+        type: CI
+        spec:
+          cloneCodebase: true
+          caching:
+            enabled: true
+            override: true
+          buildIntelligence:
+            enabled: true
+          infrastructure:
+            type: KubernetesDirect
+            spec:
+              connectorRef: k8testcluster
+              namespace: default
+              automountServiceAccountToken: true
+              nodeSelector: {}
+              harnessImageConnectorRef: account.harnessImage
+              os: Linux
+          execution:
+            steps:
+              - step:
+                  type: Run
+                  name: Run_1
+                  identifier: Run_1
+                  spec:
+                    connectorRef: account.dockerpalakconn
+                    image: alpine
+                    shell: Sh
+                    command: |-
+                      chmod +x *.sh
+                      chmod +x tests/*.sh
+                      ls -R
+              - stepGroup:
+                  name: sequential
+                  identifier: sequential
+                  steps:
+                    - step:
+                        type: Run
+                        name: Run_2
+                        identifier: Run_2
+                        spec:
+                          connectorRef: account.dockerpalakconn
+                          image: alpine
+                          shell: Sh
+                          command: |-
+                            echo "Sequential Execution Start"
+                            date
+                            bash run-sequential.sh
+                            date
+                            echo "Sequential Execution End"
+              - stepGroup:
+                  name: parallelism
+                  identifier: parallelism
+                  steps:
+                    - parallel:
+                        - step:
+                            type: Run
+                            name: group1
+                            identifier: group1
+                            spec:
+                              connectorRef: account.dockerpalakconn
+                              image: alpine
+                              shell: Sh
+                              command: |-
+                                echo "Group 1 Start"
+                                date
+                                bash group1.sh
+                                date
+                        - step:
+                            type: Run
+                            name: group2
+                            identifier: group2
+                            spec:
+                              connectorRef: account.dockerpalakconn
+                              image: apline
+                              shell: Sh
+                              command: |-
+                                echo "Group 2 Start"
+                                date
+                                bash group2.sh
+                                date
+                        - step:
+                            type: Run
+                            name: group3
+                            identifier: group3
+                            spec:
+                              connectorRef: account.dockerpalakconn
+                              image: alpine
+                              shell: Sh
+                              command: |-
+                                echo "Group 3 Start"
+                                date
+                                bash group3.sh
+                                date
+                        - step:
+                            type: Run
+                            name: group4
+                            identifier: group4
+                            spec:
+                              connectorRef: account.dockerpalakconn
+                              image: alpine
+                              shell: Sh
+                              command: |-
+                                echo "Group 4 Start"
+                                date
+                                bash group4.sh
+                                date
