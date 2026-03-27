@@ -1,5 +1,5 @@
 pipeline:
-  name: harness-pipelines-parall
+  name: harness-pipelines-matrix
   identifier: harnesspipelinesparall
   projectIdentifier: palak_labs
   orgIdentifier: default
