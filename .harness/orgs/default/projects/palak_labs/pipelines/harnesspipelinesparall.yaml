@@ -49,4 +49,6 @@ pipeline:
                         - 2
                         - 3
                     maxConcurrency: 1
+                    exclude:
+                      "-service": dev
         tags: {}
